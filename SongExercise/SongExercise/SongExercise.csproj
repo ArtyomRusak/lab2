@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMediaPlayer.cs" />
+    <Compile Include="IPlaylistCollection.cs" />
+    <Compile Include="MediaPlayer.cs" />
     <Compile Include="Playlist.cs" />
     <Compile Include="Song.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
