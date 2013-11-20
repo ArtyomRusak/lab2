@@ -8,7 +8,9 @@ namespace SongExercise
 {
     public interface IMediaPlayer
     {
-        void Play();
+        void Play(Song song);
+        void StartPlayList();
+        void SetPlaylist(Playlist playlist);
         void Pause();
     }
 }

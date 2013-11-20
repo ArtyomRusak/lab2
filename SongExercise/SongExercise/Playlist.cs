@@ -29,6 +29,7 @@ namespace SongExercise
         public int Id { get; private set; }
         public string Name { get; set; }
         public bool IsShuffle { get; set; }
+        public Song CurrentSong { get; private set; }
 
         public TimeSpan FullDuration
         {
@@ -46,6 +47,7 @@ namespace SongExercise
 
         public Playlist()
         {
+            Id = _random.Value.Next();
             _songs = new List<Song>();
             IsShuffle = false;
         }
@@ -63,6 +65,11 @@ namespace SongExercise
             Id = id;
             _songs = new List<Song>();
             IsShuffle = false;
+        }
+
+        public Playlist(List<Song> songs)
+        {
+            _songs = songs;
         }
 
         #endregion
@@ -106,24 +113,22 @@ namespace SongExercise
 
         public Song NextSong()
         {
-            if (_index == DefaultIndex)
+            if (_index >= _songs.Count)
             {
-                return _songs[_index++];
-            }
-
-            if (_index > _songs.Count)
-            {
-                _index = 0;
+                return null;
+                //_index = DefaultIndex;
             }
 
             if (IsShuffle)
             {
                 _index = _random.Value.Next(DefaultIndex, _songs.Count);
-                return _songs[_index];
+                CurrentSong = _songs[_index];
+                return CurrentSong;
             }
             else
             {
-                return _songs[_index++];
+                CurrentSong = _songs[_index++];
+                return CurrentSong;
             }
         }
     }

@@ -12,5 +12,15 @@ namespace SongExercise
         public string Name { get; set; }
         public TimeSpan Duration { get; set; }
         public string Path { get; set; }
+
+        public Song()
+        {
+            
+        }
+
+        public Song(int id)
+        {
+            Id = id;
+        }
     }
 }
