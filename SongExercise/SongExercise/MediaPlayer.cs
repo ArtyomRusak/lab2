@@ -5,16 +5,26 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using SongExercise.EventArgsExtensions;
+using SongExercise.Interfaces;
 using Timer = System.Timers.Timer;
 
 namespace SongExercise
 {
     public class MediaPlayer : IMediaPlayer
     {
+        #region [Constants]
+
+        private const int TimeToGenerateEvent = 10000;
+
+        #endregion
+
+
         #region [Private members]
 
         private Playlist _playlist;
-        private Task _task;
+        private readonly Task _task;
+        private Timer _timer;
         private DateTime _startTime;
 
         #endregion
@@ -22,7 +32,7 @@ namespace SongExercise
         #region [Public members]
 
         public event EventHandler<PlayingSongEventArgs> SongPlaying;
-        public event EventHandler<StartPlayingSong> StartSongPlaying;
+        public event EventHandler<StartPlayingSongEventArgs> StartSongPlaying;
 
         #endregion
 
@@ -50,25 +60,25 @@ namespace SongExercise
         public void Play(Song song)
         {
             _startTime = DateTime.Now;
-            StartPlayingSong eventArg = new StartPlayingSong(_playlist.CurrentSong, _startTime);
+            var eventArg = new StartPlayingSongEventArgs(_playlist.CurrentSong, _startTime);
             var temp = StartSongPlaying;
-            if (temp!=null)
+            if (temp != null)
             {
                 temp(this, eventArg);
             }
 
-            Timer timer = new Timer();
-            timer.Elapsed += timer_Elapsed;
-            timer.Interval = 10000;
-            timer.Enabled = true;
+            _timer = new Timer();
+            _timer.Elapsed += timer_Elapsed;
+            _timer.Interval = TimeToGenerateEvent;
+            _timer.Enabled = true;
 
             Thread.Sleep((int)song.Duration.TotalMilliseconds);
-            timer.Dispose();
+            _timer.Dispose();
         }
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            PlayingSongEventArgs eventArg = new PlayingSongEventArgs(_playlist.CurrentSong, DateTime.Now - _startTime);
+            var eventArg = new PlayingSongEventArgs(_playlist.CurrentSong, DateTime.Now - _startTime);
             var temp = SongPlaying;
             if (temp != null)
             {
@@ -88,7 +98,12 @@ namespace SongExercise
 
         public void Pause()
         {
-            _task.Wait();
+            // Pause playing.
+        }
+
+        public void Continue()
+        {
+            // Continue playing.
         }
 
         #endregion

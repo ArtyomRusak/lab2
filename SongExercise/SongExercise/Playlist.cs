@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SongExercise.Interfaces;
 
 namespace SongExercise
 {
@@ -11,6 +12,7 @@ namespace SongExercise
         #region [Constants]
 
         private const int DefaultIndex = 0;
+        private const string NotUniqueId = "Id is not unique.";
 
         #endregion
 
@@ -20,6 +22,7 @@ namespace SongExercise
         private readonly List<Song> _songs;
         private int _index = 0;
         private readonly Lazy<Random> _random = new Lazy<Random>(() => new Random());
+        private readonly object _locker = new object();
 
         #endregion
 
@@ -76,22 +79,21 @@ namespace SongExercise
 
         #region Implementation of IPlaylistCollection
 
-        public bool AddSong(Song song)
+        public void AddSong(Song song)
         {
-            if (CheckSong(song))
+            lock (_locker)
             {
+                CheckSong(song);
                 _songs.Add(song);
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 
         public bool RemoveSong(int id)
         {
-            return _songs.Where(song => song.Id == id).Select(song => _songs.Remove(song)).FirstOrDefault();
+            lock (_locker)
+            {
+                return _songs.Where(song => song.Id == id).Select(song => _songs.Remove(song)).FirstOrDefault();
+            }
         }
 
         public Song FindSong(int id)
@@ -106,9 +108,14 @@ namespace SongExercise
 
         #endregion
 
-        private bool CheckSong(Song song)
+        #region [Playlist's members]
+
+        private void CheckSong(Song song)
         {
-            return _songs.All(song1 => song1.Id != song.Id);
+            if (_songs.Any(song1 => song1.Id == song.Id))
+            {
+                throw new Exception(NotUniqueId);
+            }
         }
 
         public Song NextSong()
@@ -116,7 +123,6 @@ namespace SongExercise
             if (_index >= _songs.Count)
             {
                 return null;
-                //_index = DefaultIndex;
             }
 
             if (IsShuffle)
@@ -131,5 +137,8 @@ namespace SongExercise
                 return CurrentSong;
             }
         }
+
+        #endregion
+
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SongExercise;
+using SongExercise.EventArgsExtensions;
 
 namespace ConsoleApplication1
 {
@@ -33,7 +34,7 @@ namespace ConsoleApplication1
             Console.WriteLine("Song playing {0}", e.DueTime);
         }
 
-        static void player_StartSongPlaying(object sender, StartPlayingSong e)
+        static void player_StartSongPlaying(object sender, StartPlayingSongEventArgs e)
         {
             Console.WriteLine("Song starts at {0}, Name of the song = {1}", e.StartTime, e.Song.Name);
         }

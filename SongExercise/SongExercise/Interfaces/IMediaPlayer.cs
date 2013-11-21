@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SongExercise
+﻿namespace SongExercise.Interfaces
 {
     public interface IMediaPlayer
     {
@@ -12,5 +6,6 @@ namespace SongExercise
         void StartPlayList();
         void SetPlaylist(Playlist playlist);
         void Pause();
+        void Continue();
     }
 }
