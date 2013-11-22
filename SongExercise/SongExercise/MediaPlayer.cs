@@ -29,13 +29,13 @@ namespace SongExercise
 
         #endregion
 
+
         #region [Public members]
 
         public event EventHandler<PlayingSongEventArgs> SongPlaying;
         public event EventHandler<StartPlayingSongEventArgs> StartSongPlaying;
 
         #endregion
-
 
 
         #region [Ctor's]
@@ -68,7 +68,7 @@ namespace SongExercise
             }
 
             _timer = new Timer();
-            _timer.Elapsed += timer_Elapsed;
+            _timer.Elapsed += HandlingEvent;
             _timer.Interval = TimeToGenerateEvent;
             _timer.Enabled = true;
 
@@ -76,7 +76,7 @@ namespace SongExercise
             _timer.Dispose();
         }
 
-        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        void HandlingEvent(object sender, ElapsedEventArgs e)
         {
             var eventArg = new PlayingSongEventArgs(_playlist.CurrentSong, DateTime.Now - _startTime);
             var temp = SongPlaying;

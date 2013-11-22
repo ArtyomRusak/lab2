@@ -78,6 +78,7 @@ namespace SongExercise
 
         #endregion
 
+
         #region Implementation of IPlaylistCollection
 
         public void AddSong(Song song)
@@ -108,6 +109,7 @@ namespace SongExercise
         }
 
         #endregion
+
 
         #region [Playlist's members]
 
