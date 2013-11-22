@@ -13,6 +13,7 @@ namespace SongExercise
 
         private const int DefaultIndex = 0;
         private const string NotUniqueId = "Id is not unique.";
+        private const string EmptyPlaylist = "Playlist is empty. Unable to play songs.";
 
         #endregion
 
@@ -120,6 +121,10 @@ namespace SongExercise
 
         public Song NextSong()
         {
+            if (_songs.Count == DefaultIndex)
+            {
+                throw new Exception(EmptyPlaylist);
+            }
             if (_index >= _songs.Count)
             {
                 return null;
