@@ -72,7 +72,7 @@ namespace SongExercise
             _timer.Interval = TimeToGenerateEvent;
             _timer.Enabled = true;
 
-            Thread.Sleep((int)song.Duration.TotalMilliseconds);
+            Thread.Sleep((int)song.Duration.TotalMilliseconds); // Simulate playing the song.
             _timer.Dispose();
         }
 
